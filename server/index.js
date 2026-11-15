@@ -132,7 +132,7 @@ app.get("/api/analytics", requireOwner, async (req, res) => {
     const channel = await yt.channels.list({ part: ["id"], mine: true });
     const channelId = channel.data.items?.[0]?.id;
     if (!channelId) return res.status(404).json({ error: "No YouTube channel found." });
-    const analytics = google.youtubeAnalytics({ version: "v2", auth: yt.context._options.auth });
+    const analytics = google.youtubeAnalytics({ version: "v2", auth: oauth });
     const report = await analytics.reports.query({ ids: `channel==${channelId}`, startDate, endDate, dimensions: "day", metrics: "views,likes,comments,estimatedMinutesWatched,averageViewDuration" });
     res.json({ startDate, endDate, rows: report.data.rows || [] });
   } catch (error) {
